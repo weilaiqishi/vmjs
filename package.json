@@ -1,6 +1,6 @@
 {
   "name": "@kimeng/vm",
-  "version": "0.5",
+  "version": "0.5.0",
   "description": "Javascript Interpreter, run Javascript code in ECMAScript",
   "main": "./dist/vm.js",
   "source": "src",
