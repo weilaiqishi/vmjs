@@ -2,7 +2,7 @@ import test from "ava";
 import { ErrDuplicateDeclard } from "../../../src/error";
 import vm from "../../../src/vm";
 
-test("function have it's own scope even with var", t => {
+test("function have it's own scope even with var", (t) => {
   const sandbox: any = vm.createContext({});
 
   const { get, getA }: any = vm.runInContext(
@@ -26,7 +26,7 @@ module.exports = {get: get, getA: getA};
   t.deepEqual(getA(), 1);
 });
 
-test("function have it's own scope even with let", t => {
+test("function have it's own scope even with let", (t) => {
   const sandbox: any = vm.createContext({});
 
   const { get, getA }: any = vm.runInContext(
@@ -50,7 +50,7 @@ module.exports = {get: get, getA: getA};
   t.deepEqual(getA(), 1);
 });
 
-test("function have it's own scope even with const", t => {
+test("function have it's own scope even with const", (t) => {
   const sandbox: any = vm.createContext({});
 
   const { get, getA }: any = vm.runInContext(
@@ -74,7 +74,7 @@ module.exports = {get: get, getA: getA};
   t.deepEqual(getA(), 1);
 });
 
-test("function scope can redeclare with var", t => {
+test("function scope can redeclare with var", (t) => {
   const sandbox: any = vm.createContext({});
 
   const { get, getA }: any = vm.runInContext(
@@ -99,46 +99,53 @@ module.exports = {get: get, getA: getA};
   t.deepEqual(getA(), 1);
 });
 
-test("function scope can not redeclare with let", t => {
+test("function scope can not redeclare with let", (t) => {
   const sandbox: any = vm.createContext({});
 
-  const { get }: any = vm.runInContext(
-    `
-var a = 1;
+  const error = t.throws(function () {
+    vm.runInContext(
+      `
+  var a = 1;
+  
+  function get(){
+    let a = 2;
+    var a = 3;
+    return a;
+  }
+  
+  module.exports = {get: get};
+    `,
+      sandbox
+    );
+  });
 
-function get(){
-  let a = 2;
-  var a = 3;
-  return a;
-}
-
-module.exports = {get: get};
-  `,
-    sandbox
+  t.is(
+    error.message.includes("Identifier 'a' has already been declared."),
+    true
   );
-  t.throws(function() {
-    get();
-  }, ErrDuplicateDeclard("a").message);
 });
 
-test("function scope can not redeclare with const", t => {
+test("function scope can not redeclare with const", (t) => {
   const sandbox: any = vm.createContext({});
+  const error = t.throws(function () {
+    vm.runInContext(
+      `
+  var a = 1;
+  
+  function get(){
+    const a = 2;
+    var a = 3;
+    return a;
+  }
+  
+  module.exports = {get: get};
+    `,
+      sandbox
+    );
+  });
 
-  const { get }: any = vm.runInContext(
-    `
-var a = 1;
-
-function get(){
-  const a = 2;
-  var a = 3;
-  return a;
-}
-
-module.exports = {get: get};
-  `,
-    sandbox
+  t.is(
+    error.message.includes("Identifier 'a' has already been declared."),
+    true
   );
-  t.throws(function() {
-    get();
-  }, ErrDuplicateDeclard("a").message);
 });

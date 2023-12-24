@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("typeof", t => {
+test("typeof", (t) => {
   const sandbox: any = vm.createContext({});
 
   const type: any = vm.runInContext(
@@ -14,7 +14,7 @@ module.exports = typeof 123;
   t.deepEqual(type, "number");
 });
 
-test("typeof before defined", t => {
+test("typeof before defined", (t) => {
   const sandbox: any = vm.createContext({});
 
   const type: any = vm.runInContext(
@@ -28,7 +28,7 @@ module.exports = typeof a; // a is not defined, it should equal 'undefined'
   t.deepEqual(type, "undefined");
 });
 
-test("typeof before var", t => {
+test("typeof before var", (t) => {
   const sandbox: any = vm.createContext({});
 
   const type: any = vm.runInContext(
@@ -43,7 +43,7 @@ var a;
   t.deepEqual(type, "undefined");
 });
 
-test("void", t => {
+test("void", (t) => {
   const sandbox: any = vm.createContext({});
 
   const type: any = vm.runInContext(
@@ -56,7 +56,7 @@ module.exports = void 123;
   t.deepEqual(type, undefined);
 });
 
-test("delete", t => {
+test("delete", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -76,7 +76,7 @@ module.exports = obj;
   t.deepEqual(Object.keys(obj).length, 0);
 });
 
-test("!", t => {
+test("!", (t) => {
   const sandbox: any = vm.createContext({});
 
   const isTrue: any = vm.runInContext(
@@ -90,7 +90,7 @@ module.exports = isTrue;
   t.true(isTrue);
 });
 
-test("+", t => {
+test("+", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -104,7 +104,7 @@ module.exports = num;
   t.deepEqual(num, 123);
 });
 
-test("-", t => {
+test("-", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -118,7 +118,7 @@ module.exports = num;
   t.deepEqual(num, -123);
 });
 
-test("~", t => {
+test("~", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(

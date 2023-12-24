@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../src/vm";
 
-test("overwrite native toString method", t => {
+test("overwrite native toString method", (t) => {
   const sandbox: any = vm.createContext({});
 
   const { d, Demo } = vm.runInContext(
@@ -26,7 +26,7 @@ module.exports = {d: d, Demo: Demo};
   t.true(d.__proto__ === Demo.prototype);
 });
 
-test("overwrite native valueOf method", t => {
+test("overwrite native valueOf method", (t) => {
   const sandbox: any = vm.createContext({});
 
   const { d, Demo } = vm.runInContext(

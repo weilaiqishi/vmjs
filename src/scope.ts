@@ -214,7 +214,7 @@ export class Scope {
     return {
       [Kind.Const]: () => this.const(rawName, value),
       [Kind.Let]: () => this.let(rawName, value),
-      [Kind.Var]: () => this.var(rawName, value)
+      [Kind.Var]: () => this.var(rawName, value),
     }[kind]();
   }
 

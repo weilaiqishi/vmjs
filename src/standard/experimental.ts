@@ -18,11 +18,6 @@ export const experimental: ExperimentalMap = {
       );
     }
   },
-  SpreadProperty(path) {
-    const { node, ctx } = path;
-    const { object } = ctx;
-    Object.assign(object, path.evaluate(path.createChild(node.argument)));
-  },
   DoExpression(path) {
     const newScope = path.scope.createChild(ScopeType.Do);
     newScope.invasive = true;
@@ -30,5 +25,5 @@ export const experimental: ExperimentalMap = {
   },
   Decorator(path) {
     return path.evaluate(path.createChild(path.node.expression));
-  }
+  },
 };

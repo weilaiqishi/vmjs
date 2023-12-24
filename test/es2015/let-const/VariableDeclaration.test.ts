@@ -2,7 +2,7 @@ import test from "ava";
 import { ErrDuplicateDeclard } from "../../../src/error";
 import vm from "../../../src/vm";
 
-test("VariableDeclaration-const", t => {
+test("VariableDeclaration-const", (t) => {
   const sandbox: any = vm.createContext({});
 
   const a: any = vm.runInContext(
@@ -17,7 +17,7 @@ module.exports = a;
   t.deepEqual(a, 123);
 });
 
-test("VariableDeclaration-let", t => {
+test("VariableDeclaration-let", (t) => {
   const sandbox: any = vm.createContext({});
 
   const a: any = vm.runInContext(
@@ -32,73 +32,89 @@ module.exports = a;
   t.deepEqual(a, 123);
 });
 
-test("VariableDeclaration-duplicate-let", t => {
+test("VariableDeclaration-duplicate-let", (t) => {
   const sandbox: any = vm.createContext({});
 
-  t.throws(function() {
-    vm.runInContext(
-      `
+  t.throws(
+    function () {
+      vm.runInContext(
+        `
 let a = 123;
 
 let a = 321;
 
 module.exports = a;
     `,
-      sandbox
-    );
-  }, ErrDuplicateDeclard("a").message);
+        sandbox
+      );
+    },
+    undefined,
+    ErrDuplicateDeclard("a").message
+  );
 });
 
-test("VariableDeclaration-duplicate-const", t => {
+test("VariableDeclaration-duplicate-const", (t) => {
   const sandbox: any = vm.createContext({});
 
-  t.throws(function() {
-    vm.runInContext(
-      `
+  t.throws(
+    function () {
+      vm.runInContext(
+        `
 const a = 123;
 
 const a = 321;
 
 module.exports = a;
     `,
-      sandbox
-    );
-  }, ErrDuplicateDeclard("a").message);
+        sandbox
+      );
+    },
+    undefined,
+    ErrDuplicateDeclard("a").message
+  );
 });
 
-test("VariableDeclaration-duplicate-with-context-let", t => {
+test("VariableDeclaration-duplicate-with-context-let", (t) => {
   const sandbox: any = vm.createContext({
-    global: "hello"
+    global: "hello",
   });
 
-  t.throws(function() {
-    vm.runInContext(
-      `
+  t.throws(
+    function () {
+      vm.runInContext(
+        `
 let global = "world"
 module.exports = global;
       `,
-      sandbox
-    );
-  }, ErrDuplicateDeclard("global").message);
+        sandbox
+      );
+    },
+    undefined,
+    ErrDuplicateDeclard("global").message
+  );
 });
 
-test("VariableDeclaration-duplicate-with-context-const", t => {
+test("VariableDeclaration-duplicate-with-context-const", (t) => {
   const sandbox: any = vm.createContext({
-    global: "hello"
+    global: "hello",
   });
 
-  t.throws(function() {
-    vm.runInContext(
-      `
+  t.throws(
+    function () {
+      vm.runInContext(
+        `
 let global = "world"
 module.exports = global;
       `,
-      sandbox
-    );
-  }, ErrDuplicateDeclard("global").message);
+        sandbox
+      );
+    },
+    undefined,
+    ErrDuplicateDeclard("global").message
+  );
 });
 
-test("VariableDeclaration-define let then cover", t => {
+test("VariableDeclaration-define let then cover", (t) => {
   const sandbox: any = vm.createContext({});
 
   const output = vm.runInContext(
@@ -112,19 +128,23 @@ module.exports = {name: name}
   t.deepEqual(output.name, "world");
 });
 
-test("VariableDeclaration-define const then cover", t => {
+test("VariableDeclaration-define const then cover", (t) => {
   const sandbox: any = vm.createContext({});
 
-  t.throws(function() {
-    vm.runInContext(
-      `
+  t.throws(
+    function () {
+      vm.runInContext(
+        `
 const name = "hello"
 name = "world"  // cover the name, it should throw an error
 module.exports = {name: name}
       `,
-      sandbox
-    );
-  }, new TypeError("Assignment to constant variable.").message);
+        sandbox
+      );
+    },
+    undefined,
+    new TypeError("Assignment to constant variable.").message
+  );
 });
 
 // FIXME: let and const should have block scope

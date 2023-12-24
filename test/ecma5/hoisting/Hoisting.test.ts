@@ -2,7 +2,7 @@ import test from "ava";
 import vm from "../../..//src/vm";
 import { ErrNotDefined } from "../../../src/error";
 
-test("Var should Hoisting", async t => {
+test("Var should Hoisting", async (t) => {
   const sandbox: any = vm.createContext({});
 
   const say = vm.runInContext(
@@ -18,35 +18,43 @@ module.exports = function(word) {
   t.deepEqual(say("world"), "undefinedhello world");
 });
 
-test("Let should not Hoisting", async t => {
+test("Let should not Hoisting", async (t) => {
   const sandbox: any = vm.createContext({});
 
-  t.throws(function() {
-    vm.runInContext(
-      `
+  t.throws(
+    function () {
+      vm.runInContext(
+        `
 console.log(a);
 let a = 123;
     `,
-      sandbox
-    );
-  }, ErrNotDefined("a").message);
+        sandbox
+      );
+    },
+    undefined,
+    ErrNotDefined("a").message
+  );
 });
 
-test("Const should not Hoisting", async t => {
+test("Const should not Hoisting", async (t) => {
   const sandbox: any = vm.createContext({});
 
-  t.throws(function() {
-    vm.runInContext(
-      `
+  t.throws(
+    function () {
+      vm.runInContext(
+        `
 console.log(a);
 const a = 123;
     `,
-      sandbox
-    );
-  }, ErrNotDefined("a").message);
+        sandbox
+      );
+    },
+    undefined,
+    ErrNotDefined("a").message
+  );
 });
 
-test("Function should not Hoisting", async t => {
+test("Function should not Hoisting", async (t) => {
   const sandbox: any = vm.createContext({});
 
   const say = vm.runInContext(
@@ -64,7 +72,7 @@ module.exports = function(word) {
   t.deepEqual(say("world"), "hello world");
 });
 
-test("For Hoisting", async t => {
+test("For Hoisting", async (t) => {
   const sandbox: any = vm.createContext({});
 
   const func = vm.runInContext(
@@ -86,7 +94,7 @@ module.exports = get;
   t.true(func());
 });
 
-test("If Hoisting", async t => {
+test("If Hoisting", async (t) => {
   const sandbox: any = vm.createContext({});
 
   const func = vm.runInContext(
@@ -105,7 +113,7 @@ module.exports = get;
   t.true(func());
 });
 
-test("While Hoisting", async t => {
+test("While Hoisting", async (t) => {
   const sandbox: any = vm.createContext({});
 
   const func = vm.runInContext(
@@ -124,7 +132,7 @@ module.exports = get;
   t.true(func());
 });
 
-test("Switch Hoisting", async t => {
+test("Switch Hoisting", async (t) => {
   const sandbox: any = vm.createContext({});
 
   const func = vm.runInContext(

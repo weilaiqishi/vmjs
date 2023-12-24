@@ -1,4 +1,4 @@
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 import { Context, ISandBox } from "./context";
 import evaluate from "./evaluate";
 import { Path } from "./path";
@@ -38,11 +38,13 @@ export function runInContext(
       "classProperties",
       "decorators",
       "doExpressions",
-      "exportExtensions",
+      "exportDefaultFrom",
       "flow",
-      "objectRestSpread"
-    ]
+      "objectRestSpread",
+    ],
   });
+
+  // console.log(JSON.stringify(ast))
 
   const path = new Path(ast, null, scope, {}, new Stack());
   path.preset = preset;

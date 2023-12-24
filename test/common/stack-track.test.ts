@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../src/vm";
 
-test("not defined", t => {
+test("not defined", (t) => {
   const sandbox: any = vm.createContext({});
 
   try {
@@ -15,7 +15,7 @@ get();`,
       sandbox
     );
     t.fail("it should throw an error");
-  } catch (err) {
+  } catch (err: any) {
     t.deepEqual(err.message, "b is not defined");
     t.true(typeof err.stack === "string");
     t.deepEqual(

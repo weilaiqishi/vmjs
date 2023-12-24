@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("DefaultParameter-1", t => {
+test("DefaultParameter-1", (t) => {
   const sandbox: any = vm.createContext({});
 
   const func: any = vm.runInContext(
@@ -17,7 +17,7 @@ module.exports = say;
   t.deepEqual(func("world"), "hello world");
 });
 
-test("DefaultParameter-2", t => {
+test("DefaultParameter-2", (t) => {
   const sandbox: any = vm.createContext({});
 
   const People: any = vm.runInContext(

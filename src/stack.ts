@@ -11,7 +11,7 @@ export interface ILocation {
 export interface IPen {
   stack: string;
   filename: string;
-  location: ILocation;
+  location: ILocation | null | undefined;
 }
 
 export class Stack {
@@ -53,13 +53,14 @@ export class Stack {
   public get raw(): string {
     return this.items
       .reverse()
-      .map(v => {
-        const meta = `<${v.filename}>:${v.location.start.line}:${
-          v.location.start.column + 1 // while + 1 ? because the stack track diffrent with babylon parser
+      .map((v) => {
+        // ?
+        const meta = `<${v.filename}>:${v.location!.start.line}:${
+          v.location!.start.column + 1 // while + 1 ? because the stack track diffrent with babylon parser
         }`;
         return v.stack ? `at ${v.stack} (${meta})` : `at ${meta}`;
       })
-      .map(v => "    " + v)
+      .map((v) => "    " + v)
       .join("\n");
   }
 

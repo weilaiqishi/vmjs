@@ -12,9 +12,6 @@ const webpackConfig: webpack.Configuration = {
     libraryTarget: "umd"
   },
   target: "node",
-  externals: {
-    "babel-types": "babel-types"
-  },
   resolve: {
     modules: ["node_modules"],
     extensions: [".ts", ".js"]

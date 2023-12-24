@@ -1,10 +1,11 @@
-import * as types from "babel-types";
+import * as types from "@babel/types";
 import * as isFunction from "lodash.isfunction";
 import {
   ErrInvalidIterable,
   ErrNoSuper,
   ErrNotDefined,
-  ErrIsNotFunction
+  ErrIsNotFunction,
+  ErrorUsing,
 } from "../error";
 import { Path } from "../path";
 import {
@@ -12,7 +13,7 @@ import {
   _createClass,
   _inherits,
   _possibleConstructorReturn,
-  _taggedTemplateLiteral
+  _taggedTemplateLiteral,
 } from "../runtime";
 import { ES2015Map, ScopeType } from "../type";
 import { Signal } from "../signal";
@@ -28,7 +29,7 @@ import {
   isImportDefaultSpecifier,
   isImportSpecifier,
   isMemberExpression,
-  isVariableDeclaration
+  isVariableDeclaration,
 } from "../packages/babel-types";
 
 import { defineFunctionLength, defineFunctionName } from "../utils";
@@ -37,7 +38,7 @@ function overriteStack(err: Error, stack: Stack, node: types.Node): Error {
   stack.push({
     filename: ANONYMOUS,
     stack: stack.currentStackName,
-    location: node.loc
+    location: node.loc,
   });
   err.stack = err.toString() + "\n" + stack.raw;
   return err;
@@ -68,7 +69,7 @@ export const es2015: ES2015Map = {
     };
 
     defineFunctionLength(func, node.params.length);
-    defineFunctionName(func, node.id ? node.id.name : "");
+    defineFunctionName(func, "");
 
     return func;
   },
@@ -76,8 +77,8 @@ export const es2015: ES2015Map = {
     const { node } = path;
     return ([] as types.Node[])
       .concat(node.expressions, node.quasis)
-      .sort((a, b) => a.start - b.start)
-      .map(element => path.evaluate(path.createChild(element)))
+      .sort((a, b) => (a.start || 0) - (b.start || 0))
+      .map((element) => path.evaluate(path.createChild(element)))
       .join("");
   },
   TemplateElement(path) {
@@ -112,11 +113,15 @@ export const es2015: ES2015Map = {
        */
       const declarator: types.VariableDeclarator = node.left.declarations[0];
       const varName = (declarator.id as types.Identifier).name;
+      const kind = node.left.kind;
+      if (kind === "using" || kind === "await using") {
+        throw ErrorUsing(node);
+      }
       for (const value of entity) {
         const forOfScope = scope.createChild(ScopeType.ForOf);
         forOfScope.invasive = true;
         forOfScope.isolated = false;
-        forOfScope.declare(node.left.kind, varName, value); // define in current scope
+        forOfScope.declare(kind, varName, value); // define in current scope
         const signal = path.evaluate(path.createChild(node.body, forOfScope));
         if (Signal.isBreak(signal)) {
           if (!signal.value) {
@@ -179,7 +184,7 @@ export const es2015: ES2015Map = {
 
     // support class decorators
     const classDecorators = (path.node.decorators || [])
-      .map(node => path.evaluate(path.createChild(node)))
+      .map((node) => path.evaluate(path.createChild(node)))
       .reverse(); // revers decorators
 
     // TODO: support class property decorator
@@ -192,37 +197,50 @@ export const es2015: ES2015Map = {
       decorator(ClassConstructor);
     }
 
-    path.scope.const(path.node.id.name, ClassConstructor);
+    path.scope.const(path.node.id!.name, ClassConstructor);
   },
   ClassBody(path) {
     const { node, scope, stack } = path;
     const constructor: types.ClassMethod | void = node.body.find(
-      n => isClassMethod(n) && n.kind === "constructor"
+      (n) => isClassMethod(n) && n.kind === "constructor"
     ) as types.ClassMethod | void;
     const methods: types.ClassMethod[] = node.body.filter(
-      n => isClassMethod(n) && n.kind !== "constructor"
+      (n) => isClassMethod(n) && n.kind !== "constructor"
     ) as types.ClassMethod[];
-    const properties: types.ClassProperty[] = node.body.filter(n =>
+    const properties: types.ClassProperty[] = node.body.filter((n) =>
       isClassProperty(n)
     ) as types.ClassProperty[];
 
     const parentNode = (path.parent as Path<types.ClassDeclaration>).node;
 
-    const Class = (SuperClass => {
+    const Class = ((SuperClass) => {
       if (SuperClass) {
         _inherits(ClassConstructor, SuperClass);
       }
 
       function ClassConstructor(...args) {
-        stack.enter(parentNode.id.name + ".constructor");
+        stack.enter(parentNode.id!.name + ".constructor");
         _classCallCheck(this, ClassConstructor);
         const classScope = scope.createChild(ScopeType.Constructor);
 
         // define class property
-        properties.forEach(p => {
-          this[p.key.name] = path.evaluate(
-            path.createChild(p.value, classScope)
-          );
+        properties.forEach((p) => {
+          if ("name" in p.key) {
+            if (p.value) {
+              this[p.key.name] = path.evaluate(
+                path.createChild(p.value, classScope)
+              );
+            } else {
+              this[p.key.name] = undefined;
+            }
+            // this[p.key.name] = path.evaluate(
+            //   // @ts-ignore
+            //   path.createChild(p.value, classScope)
+            // );
+          } else {
+            console.log("p.key no name");
+            throw p;
+          }
         });
 
         if (constructor) {
@@ -236,7 +254,7 @@ export const es2015: ES2015Map = {
           }
 
           classScope.const(NEW, {
-            target: ClassConstructor
+            target: ClassConstructor,
           });
 
           for (const n of constructor.body.body) {
@@ -246,7 +264,7 @@ export const es2015: ES2015Map = {
                 ClassConstructor,
                 ClassConstructorArguments: args,
                 ClassEntity: this,
-                classScope
+                classScope,
               })
             );
           }
@@ -276,18 +294,22 @@ export const es2015: ES2015Map = {
         ClassConstructor,
         constructor ? constructor.params.length : 0
       );
-      defineFunctionName(ClassConstructor, parentNode.id.name);
-
+      // TODO handle ClassDeclaration["id"] is null
+      /**
+       * https://github.com/babel/babel/issues/15918
+       * example:
+       *   export default class {}
+       */
+      defineFunctionName(ClassConstructor, parentNode.id!.name);
       const classMethods = methods
         .map((method: types.ClassMethod) => {
-          const methodName: string = method.id
-            ? method.id.name
-            : method.computed
-              ? path.evaluate(path.createChild(method.key))
-              : (method.key as types.Identifier).name;
+          const methodName: string = method.computed
+            ? path.evaluate(path.createChild(method.key))
+            : (method.key as types.Identifier).name;
           const methodScope = scope.createChild(ScopeType.Function);
-          const func = function(...args) {
-            stack.enter(parentNode.id.name + "." + methodName);
+          const func = function (...args) {
+            // TODO handle ClassDeclaration["id"] is null
+            stack.enter(parentNode.id!.name + "." + methodName);
             methodScope.const(THIS, this);
             methodScope.const(NEW, { target: undefined });
 
@@ -303,7 +325,7 @@ export const es2015: ES2015Map = {
                 SuperClass,
                 ClassConstructor,
                 ClassMethodArguments: args,
-                ClassEntity: this
+                ClassEntity: this,
               })
             );
 
@@ -318,8 +340,8 @@ export const es2015: ES2015Map = {
           defineFunctionName(func, methodName);
 
           return {
-            key: (method.key as any).name,
-            [method.kind === "method" ? "value" : method.kind]: func
+            key: methodName,
+            [method.kind === "method" ? "value" : method.kind]: func,
           };
         })
         .concat([{ key: "constructor", value: ClassConstructor }]);
@@ -385,7 +407,7 @@ export const es2015: ES2015Map = {
     let defaultImport: string = ""; // default import object
     const otherImport: string[] = []; // import property
     const moduleName: string = path.evaluate(path.createChild(node.source));
-    node.specifiers.forEach(n => {
+    node.specifiers.forEach((n) => {
       if (isImportDefaultSpecifier(n)) {
         // defaultImport = visitors.ImportDefaultSpecifier(path.createChild(n));
         defaultImport = path.evaluate(path.createChild(n));
@@ -429,21 +451,27 @@ export const es2015: ES2015Map = {
       const moduleObject = moduleVar.value;
       moduleObject.exports = {
         ...moduleObject.exports,
-        ...path.evaluate(path.createChild(node.declaration))
+        ...path.evaluate(path.createChild(node.declaration)),
       };
     }
   },
   ExportNamedDeclaration(path) {
     const { node } = path;
-    node.specifiers.forEach(n => path.evaluate(path.createChild(n)));
+    node.specifiers.forEach((n) => path.evaluate(path.createChild(n)));
   },
   AssignmentPattern(path) {
     const { node, scope, ctx } = path;
     const { value } = ctx;
-    scope.const(
-      node.left.name,
-      value === undefined ? path.evaluate(path.createChild(node.right)) : value
-    );
+    if ("name" in node.left) {
+      scope.const(
+        node.left.name,
+        value === undefined
+          ? path.evaluate(path.createChild(node.right))
+          : value
+      );
+    } else {
+      throw "No support for AssignmentPattern node.left.type without name";
+    }
   },
   RestElement(path) {
     const { node, scope, ctx } = path;
@@ -452,15 +480,20 @@ export const es2015: ES2015Map = {
   },
   YieldExpression(path) {
     const { next } = path.ctx;
-    next(path.evaluate(path.createChild(path.node.argument))); // call next
+    if (path.node.argument) {
+      next(path.evaluate(path.createChild(path.node.argument))); // call next
+    } else {
+      throw "No support for YieldExpression path.node.argument is undefine";
+    }
   },
   TaggedTemplateExpression(path) {
-    const str = path.node.quasi.quasis.map(v => v.value.cooked);
-    const raw = path.node.quasi.quasis.map(v => v.value.raw);
+    const str = path.node.quasi.quasis.map((v) => v.value.cooked);
+    const raw = path.node.quasi.quasis.map((v) => v.value.raw);
+    // @ts-ignore
     const templateObject = _taggedTemplateLiteral(str, raw);
     const func = path.evaluate(path.createChild(path.node.tag));
     const expressionResultList =
-      path.node.quasi.expressions.map(n =>
+      path.node.quasi.expressions.map((n) =>
         path.evaluate(path.createChild(n))
       ) || [];
     return func(templateObject, ...expressionResultList);
@@ -468,5 +501,5 @@ export const es2015: ES2015Map = {
   MetaProperty(path) {
     const obj = path.evaluate(path.createChild(path.node.meta));
     return obj[path.node.property.name];
-  }
+  },
 };

@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("if", t => {
+test("if", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -23,7 +23,7 @@ module.exports = obj;
   t.true(obj.isTrue);
 });
 
-test("if-else", t => {
+test("if-else", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -47,7 +47,7 @@ module.exports = obj;
   t.true(obj.isTrue);
 });
 
-test("if else-else if", t => {
+test("if else-else if", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -70,7 +70,7 @@ module.exports = obj;
   t.deepEqual(obj.block, "else if");
 });
 
-test("if-else-else if-else", t => {
+test("if-else-else if-else", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(

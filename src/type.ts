@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import { Path } from "./path";
 
 export enum ScopeType {
@@ -21,20 +21,20 @@ export enum ScopeType {
   Catch,
   Finally,
   Class,
-  Block
+  Block,
 }
 
 export const isolatedScopeMap = {
   [ScopeType.Function]: true,
   [ScopeType.Constructor]: true,
   [ScopeType.Method]: true,
-  [ScopeType.Object]: true
+  [ScopeType.Object]: true,
 };
 
 export enum Kind {
   Var = "var",
   Const = "const",
-  Let = "let"
+  Let = "let",
 }
 
 export type KindType = "var" | "const" | "let";
@@ -125,7 +125,6 @@ export interface IExperimentalTypeMap {
   ImportDefaultSpecifier: t.ImportDefaultSpecifier;
   // ImportNamespaceSpecifier: t.ImportNamespaceSpecifier;
   ExportSpecifier: t.ExportSpecifier;
-  SpreadProperty: t.SpreadProperty;
   DoExpression: t.DoExpression;
   Decorator: t.Decorator;
 }
@@ -138,29 +137,29 @@ export interface INodeTypeMap
     IExperimentalTypeMap {}
 
 export type ES5Map = {
-  [key in keyof IES5TypeMap]: (path: Path<IES5TypeMap[key]>) => any
+  [key in keyof IES5TypeMap]: (path: Path<IES5TypeMap[key]>) => any;
 };
 
 export type ES2015Map = {
-  [key in keyof IES2015TypeMap]: (path: Path<IES2015TypeMap[key]>) => any
+  [key in keyof IES2015TypeMap]: (path: Path<IES2015TypeMap[key]>) => any;
 };
 
 export type ES2016Map = {
-  [key in keyof IES2016TypeMap]: (path: Path<IES2016TypeMap[key]>) => any
+  [key in keyof IES2016TypeMap]: (path: Path<IES2016TypeMap[key]>) => any;
 };
 
 export type ES2017Map = {
-  [key in keyof IES2017TypeMap]: (path: Path<IES2017TypeMap[key]>) => any
+  [key in keyof IES2017TypeMap]: (path: Path<IES2017TypeMap[key]>) => any;
 };
 
 export type ExperimentalMap = {
   [key in keyof IExperimentalTypeMap]: (
     path: Path<IExperimentalTypeMap[key]>
-  ) => any
+  ) => any;
 };
 
 export type IEcmaScriptMap = {
-  [key in keyof INodeTypeMap]: (path: Path<INodeTypeMap[key]>) => any
+  [key in keyof INodeTypeMap]: (path: Path<INodeTypeMap[key]>) => any;
 };
 
 export type EvaluateFunc = (path: Path<t.Node>) => any;
@@ -171,5 +170,5 @@ export enum presetMap {
   es2016 = "es2016",
   es2017 = "es2017",
   es2018 = "es2018",
-  env = "env"
+  env = "env",
 }

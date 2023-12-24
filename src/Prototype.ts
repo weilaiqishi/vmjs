@@ -1,3 +1,5 @@
 export class Prototype {
-  constructor(public constructor) {}
+  constructor(fn) {
+    this.constructor = fn;
+  }
 }

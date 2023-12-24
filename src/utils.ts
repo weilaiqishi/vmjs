@@ -3,7 +3,7 @@ export function defineFunctionName(func, name: string) {
     value: name || "",
     writable: false,
     enumerable: false,
-    configurable: true
+    configurable: true,
   });
 }
 
@@ -12,6 +12,6 @@ export function defineFunctionLength(func, length: number) {
     value: length || 0,
     writable: false,
     enumerable: false,
-    configurable: true
+    configurable: true,
   });
 }

@@ -3,7 +3,7 @@ import { ES2016Map } from "../type";
 
 const BinaryExpressionOperatorEvaluateMap = {
   ...es5.BinaryExpressionOperatorEvaluateMap,
-  "**": (a, b) => Math.pow(a, b)
+  "**": (a, b) => Math.pow(a, b),
 };
 
 export const es2016: ES2016Map = {
@@ -13,5 +13,5 @@ export const es2016: ES2016Map = {
       path.evaluate(path.createChild(node.left)),
       path.evaluate(path.createChild(node.right))
     );
-  }
+  },
 };

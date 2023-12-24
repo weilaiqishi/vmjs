@@ -6,7 +6,6 @@
     "strictNullChecks": true,
     "strict": true,
     "alwaysStrict": false,
-    "noImplicitUseStrict": true,
     "noImplicitAny": false,
     "noImplicitThis": false,
     "rootDirs": ["."],

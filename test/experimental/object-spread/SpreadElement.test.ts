@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("SpreadElement-1", t => {
+test("SpreadElement-1", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -19,7 +19,7 @@ module.exports = {...obj};
   t.false(obj.isTrue);
 });
 
-test("SpreadElement-2", t => {
+test("SpreadElement-2", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -45,7 +45,7 @@ module.exports = {...obj1, ...obj2};
   t.deepEqual(obj.name, "hello");
 });
 
-test("SpreadElement-3", t => {
+test("SpreadElement-3", (t) => {
   const sandbox: any = vm.createContext({});
 
   const arr: any = vm.runInContext(
@@ -62,7 +62,7 @@ module.exports = [...arr1, ...arr2];
   t.deepEqual(arr, [1, 2, 3, 4, 5, 6]);
 });
 
-test("SpreadElement-4", t => {
+test("SpreadElement-4", (t) => {
   const sandbox: any = vm.createContext({});
 
   const arr: any = vm.runInContext(
@@ -79,7 +79,7 @@ module.exports = [...arr1, ...obj1];
   t.deepEqual(arr, [1, 2, 3]);
 });
 
-test("SpreadElement-5", t => {
+test("SpreadElement-5", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -98,6 +98,6 @@ module.exports = {...arr1, ...obj1};
     1: 2,
     2: 3,
     4: true,
-    5: true
+    5: true,
   });
 });

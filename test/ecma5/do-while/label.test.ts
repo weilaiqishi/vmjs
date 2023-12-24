@@ -2,7 +2,7 @@ import test from "ava";
 import { ErrDuplicateDeclard } from "../../../src/error";
 import vm from "../../../src/vm";
 
-test("break with label", t => {
+test("break with label", (t) => {
   const sandbox: any = vm.createContext({});
 
   const a: any = vm.runInContext(
@@ -22,7 +22,7 @@ module.exports = a;
   t.deepEqual(a, 2);
 });
 
-test("continue with label", t => {
+test("continue with label", (t) => {
   const sandbox: any = vm.createContext({});
 
   const a: any = vm.runInContext(

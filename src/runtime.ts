@@ -6,7 +6,7 @@ export function _classCallCheck(instance, Constructor) {
     throw new TypeError("Cannot call a class as a function");
   }
 }
-export const _createClass = (function() {
+export const _createClass = (function () {
   function defineProperties(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
@@ -16,7 +16,7 @@ export const _createClass = (function() {
       Object.defineProperty(target, descriptor.key, descriptor);
     }
   }
-  return function(Constructor, protoProps?, staticProps?) {
+  return function (Constructor, protoProps?, staticProps?) {
     if (protoProps) defineProperties(Constructor.prototype, protoProps);
     if (staticProps) defineProperties(Constructor, staticProps);
     return Constructor;
@@ -46,8 +46,8 @@ export function _inherits(subClass, superClass) {
       value: subClass,
       enumerable: false,
       writable: true,
-      configurable: true
-    }
+      configurable: true,
+    },
   });
   if (superClass)
     Object.setPrototypeOf
@@ -57,7 +57,7 @@ export function _inherits(subClass, superClass) {
 
 export const _extends =
   Object.assign ||
-  function(target) {
+  function (target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
       for (var key in source) {
@@ -81,9 +81,9 @@ export function _toConsumableArray(arr) {
 }
 
 export function _asyncToGenerator(fn) {
-  return function() {
+  return function () {
     var gen = fn.apply(this, arguments);
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       function step(key, arg?) {
         try {
           var info = gen[key](arg);
@@ -96,10 +96,10 @@ export function _asyncToGenerator(fn) {
           resolve(value);
         } else {
           return Promise.resolve(value).then(
-            function(value) {
+            function (value) {
               step("next", value);
             },
-            function(err) {
+            function (err) {
               step("throw", err);
             }
           );
@@ -111,16 +111,17 @@ export function _asyncToGenerator(fn) {
 }
 
 export const __generator =
-  (this && this.__generator) ||
-  function(thisArg, body) {
+  // @ts-ignore
+  this?.__generator ||
+  function (thisArg, body) {
     var _ = {
         label: 0,
-        sent: function() {
+        sent: function () {
           if (t[0] & 1) throw t[1];
           return t[1];
         },
         trys: [],
-        ops: []
+        ops: [],
       },
       f,
       y,
@@ -129,13 +130,13 @@ export const __generator =
     return (
       (g = { next: verb(0), throw: verb(1), return: verb(2) }),
       typeof Symbol === "function" &&
-        (g[Symbol.iterator] = function() {
+        (g[Symbol.iterator] = function () {
           return this;
         }),
       g
     );
     function verb(n) {
-      return function(v) {
+      return function (v) {
         return step([n, v]);
       };
     }
@@ -213,9 +214,10 @@ export function _taggedTemplateLiteral(strings: string[], raw: string[]) {
 }
 
 export const __awaiter =
-  (this && this.__awaiter) ||
-  function(thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function(resolve, reject) {
+  // @ts-ignore
+  this?.__awaiter ||
+  function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -233,7 +235,7 @@ export const __awaiter =
       function step(result) {
         result.done
           ? resolve(result.value)
-          : new P(function(resolve) {
+          : new P(function (resolve) {
               resolve(result.value);
             }).then(fulfilled, rejected);
       }

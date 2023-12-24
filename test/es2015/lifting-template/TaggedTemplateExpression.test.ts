@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("LiftingTemplate-1", t => {
+test("LiftingTemplate-1", (t) => {
   const sandbox: any = vm.createContext({});
 
   const str: any = vm.runInContext(
@@ -12,7 +12,7 @@ test("LiftingTemplate-1", t => {
   t.deepEqual(str, "Hi 6!");
 });
 
-test("LiftingTemplate-with/", t => {
+test("LiftingTemplate-with/", (t) => {
   const sandbox: any = vm.createContext({});
 
   const str: any = vm.runInContext(

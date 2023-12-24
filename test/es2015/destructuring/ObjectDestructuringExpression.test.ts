@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("ObjectDestructuringExpression-object", t => {
+test("ObjectDestructuringExpression-object", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -18,7 +18,7 @@ module.exports = {a: a, b: b, c: c};
   t.deepEqual(obj.c, 3);
 });
 
-test("ObjectDestructuringExpression-object-with-alias-name", t => {
+test("ObjectDestructuringExpression-object-with-alias-name", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -35,7 +35,7 @@ module.exports = {a: _a, b: _b, c: _c};
   t.deepEqual(obj.c, 3);
 });
 
-test("ObjectDestructuringExpression-array", t => {
+test("ObjectDestructuringExpression-array", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -52,7 +52,7 @@ module.exports = {a: a, b: b, c: c};
   t.deepEqual(obj.c, 3);
 });
 
-test("ObjectDestructuringExpression-array-with-alias-name", t => {
+test("ObjectDestructuringExpression-array-with-alias-name", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -69,17 +69,21 @@ module.exports = {a: _a, b: _b, c: _c};
   t.deepEqual(obj.c, 3);
 });
 
-test("Invalid array DestructuringExpression", t => {
+test("Invalid array DestructuringExpression", (t) => {
   const sandbox: any = vm.createContext({});
 
-  t.throws(() => {
-    vm.runInContext(
-      `
+  t.throws(
+    () => {
+      vm.runInContext(
+        `
       const [a, b, c] = {};
       
       module.exports = {a: _a, b: _b, c: _c};
     `,
-      sandbox
-    );
-  }, "{(intermediate value)} is not iterable");
+        sandbox
+      );
+    },
+    undefined,
+    "{(intermediate value)} is not iterable"
+  );
 });

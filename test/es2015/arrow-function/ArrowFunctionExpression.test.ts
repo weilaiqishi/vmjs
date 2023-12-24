@@ -1,9 +1,9 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("ArrowFunctionExpression-1", t => {
+test("ArrowFunctionExpression-1", (t) => {
   const sandbox: any = vm.createContext({
-    name: "world"
+    name: "world",
   });
 
   const func = vm.runInContext(
@@ -22,7 +22,7 @@ module.exports = func;
   t.deepEqual(func(), "hello world");
 });
 
-test("ArrowFunctionExpression-2", t => {
+test("ArrowFunctionExpression-2", (t) => {
   const sandbox: any = vm.createContext();
 
   const func = vm.runInContext(
@@ -40,7 +40,7 @@ module.exports = func;
   t.deepEqual(func(), "hello undefined");
 });
 
-test("ArrowFunctionExpression-3", t => {
+test("ArrowFunctionExpression-3", (t) => {
   const sandbox: any = vm.createContext();
 
   const func = vm.runInContext(

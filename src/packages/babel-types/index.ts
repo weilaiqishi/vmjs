@@ -10,18 +10,20 @@ import {
   ImportDefaultSpecifier,
   ImportSpecifier,
   MemberExpression,
-  Node,
+  Node as _Node,
   ObjectExpression,
   ObjectPattern,
   ObjectProperty,
   RestElement,
   SpreadElement,
   VariableDeclaration,
-  StringLiteral
-} from "babel-types";
+  StringLiteral,
+} from "@babel/types";
+
+type Node = _Node | null | undefined;
 
 function is(node: Node, type: string): boolean {
-  return node.type === type;
+  return node?.type === type;
 }
 
 export function isStringLiteral(node: Node): node is StringLiteral {

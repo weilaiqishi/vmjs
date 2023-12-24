@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("basic without flags", t => {
+test("basic without flags", (t) => {
   const sandbox: any = vm.createContext({});
 
   const func: any = vm.runInContext(
@@ -21,7 +21,7 @@ module.exports = isSayHi;
   t.false(func("abcd"));
 });
 
-test("with flags", t => {
+test("with flags", (t) => {
   const sandbox: any = vm.createContext({});
 
   const func: any = vm.runInContext(
@@ -41,7 +41,7 @@ module.exports = isSayHi;
   t.true(func("Hello woRld"));
 });
 
-test("with multiple flags", t => {
+test("with multiple flags", (t) => {
   const sandbox: any = vm.createContext({});
 
   const func: any = vm.runInContext(

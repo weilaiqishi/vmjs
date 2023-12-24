@@ -2,7 +2,7 @@ import test from "ava";
 
 import vm from "../../../src/vm";
 
-test("ArrayExpression-1", t => {
+test("ArrayExpression-1", (t) => {
   const sandbox: any = vm.createContext({});
 
   const arr: any = vm.runInContext(
@@ -20,7 +20,7 @@ module.exports = arr;
   t.deepEqual(arr, [1, 2, 3, 4]);
 });
 
-test("ArrayExpression-2", t => {
+test("ArrayExpression-2", (t) => {
   const sandbox: any = vm.createContext({});
 
   const arr: any = vm.runInContext(
@@ -38,7 +38,7 @@ module.exports = arr;
   t.deepEqual(arr, [1, 2, 6, 4]);
 });
 
-test("ArrayExpression-with-undefined", t => {
+test("ArrayExpression-with-undefined", (t) => {
   const sandbox: any = vm.createContext({});
 
   const arr: any = vm.runInContext(
@@ -53,7 +53,7 @@ module.exports = [1, 2, undefined, 4];
   t.deepEqual(arr, [1, 2, undefined, 4]);
 });
 
-test("ArrayExpression-with-null", t => {
+test("ArrayExpression-with-null", (t) => {
   const sandbox: any = vm.createContext({});
 
   const arr: any = vm.runInContext(

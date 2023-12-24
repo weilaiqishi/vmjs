@@ -1,4 +1,4 @@
-import { Node } from "babel-types";
+import { Node } from "@babel/types";
 import { Scope } from "./scope";
 import { ScopeType, EvaluateFunc, presetMap } from "./type";
 import { Stack } from "./stack";

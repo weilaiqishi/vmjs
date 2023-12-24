@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../src/vm";
 
-test("allown duplicate object key", t => {
+test("allown duplicate object key", (t) => {
   // TODO
   const sandbox: any = vm.createContext({});
   const obj = vm.runInContext(

@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("ConditionalExpression-1", t => {
+test("ConditionalExpression-1", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -14,7 +14,7 @@ module.exports = true ? 1 : 2;
   t.deepEqual(num, 1);
 });
 
-test("ConditionalExpression-or-2", t => {
+test("ConditionalExpression-or-2", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -27,7 +27,7 @@ module.exports = false ? 1 : 2;
   t.deepEqual(num, 2);
 });
 
-test("ConditionalExpression with function call", t => {
+test("ConditionalExpression with function call", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -43,7 +43,7 @@ module.exports = isOnline() ? 1 : 2;
   t.deepEqual(num, 1);
 });
 
-test("ConditionalExpression in function call", t => {
+test("ConditionalExpression in function call", (t) => {
   const sandbox: any = vm.createContext({});
 
   const isAdult: any = vm.runInContext(

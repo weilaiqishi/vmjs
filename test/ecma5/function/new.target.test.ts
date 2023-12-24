@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("new target without new", t => {
+test("new target without new", (t) => {
   const sandbox: any = vm.createContext({});
 
   const Person = vm.runInContext(
@@ -18,7 +18,7 @@ module.exports = Person;
   t.deepEqual(Person(), undefined);
 });
 
-test("new target with new", t => {
+test("new target with new", (t) => {
   const sandbox: any = vm.createContext({});
 
   const { Person, target } = vm.runInContext(

@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("ShorthandProperties", t => {
+test("ShorthandProperties", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(

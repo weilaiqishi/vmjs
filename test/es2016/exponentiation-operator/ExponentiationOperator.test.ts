@@ -2,7 +2,7 @@ import test from "ava";
 
 import vm from "../../../src/vm";
 
-test("ExponentiationOperator", t => {
+test("ExponentiationOperator", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -16,7 +16,7 @@ module.exports = num;
   t.deepEqual(num, 4);
 });
 
-test("ExponentiationOperator-2", t => {
+test("ExponentiationOperator-2", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(

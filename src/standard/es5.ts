@@ -1,11 +1,12 @@
-import * as types from "babel-types";
+import * as types from "@babel/types";
 import * as isFunction from "lodash.isfunction";
 import {
   ErrNoSuper,
   ErrNotDefined,
   ErrIsNotFunction,
   ErrCanNotReadProperty,
-  ErrInvalidIterable
+  ErrInvalidIterable,
+  ErrorUsing,
 } from "../error";
 import { __generator, _toConsumableArray, __awaiter } from "../runtime";
 import { Var, IVar } from "../var";
@@ -27,7 +28,7 @@ import {
   isRestElement,
   isSpreadElement,
   isVariableDeclaration,
-  isStringLiteral
+  isStringLiteral,
 } from "../packages/babel-types";
 
 import { defineFunctionLength, defineFunctionName } from "../utils";
@@ -39,7 +40,7 @@ function overriteStack(err: Error, stack: Stack, node: types.Node): Error {
   stack.push({
     filename: ANONYMOUS,
     stack: stack.currentStackName,
-    location: node.loc
+    location: node.loc,
   });
   err.stack = err.toString() + "\n" + stack.raw;
   return err;
@@ -77,7 +78,7 @@ export const BinaryExpressionOperatorEvaluateMap = {
   //   throw ErrImplement('**')
   // },
   in: (a, b) => a in b,
-  instanceof: (a, b) => a instanceof b
+  instanceof: (a, b) => a instanceof b,
 };
 
 export const AssignmentExpressionEvaluateMap = {
@@ -138,7 +139,7 @@ export const AssignmentExpressionEvaluateMap = {
     // tslint:disable-next-line: no-bitwise
     $var.set($var.value & v);
     return $var.value;
-  }
+  },
 };
 
 export const es5: ES5Map = {
@@ -242,7 +243,7 @@ export const es5: ES5Map = {
                   return s;
                 }
               })(scope);
-              targetScope.parent.var(
+              targetScope.parent?.var(
                 (declaration.id as types.Identifier).name,
                 undefined
               );
@@ -301,6 +302,10 @@ export const es5: ES5Map = {
     const { node, scope, stack } = path;
     const kind = node.kind;
 
+    if (kind === "using" || kind === "await using") {
+      throw ErrorUsing(node);
+    }
+
     for (const declaration of node.declarations) {
       const varKeyValueMap: { [k: string]: any } = {};
       /**
@@ -323,11 +328,11 @@ export const es5: ES5Map = {
           if (isObjectProperty(n)) {
             vars.push({
               key: (n.key as any).name as string,
-              alias: (n.value as any).name as string
+              alias: (n.value as any).name as string,
             });
           }
         }
-        const obj = path.evaluate(path.createChild(declaration.init));
+        const obj = path.evaluate(path.createChild(declaration.init!));
 
         for (const $var of vars) {
           if ($var.key in obj) {
@@ -337,20 +342,21 @@ export const es5: ES5Map = {
       } else if (isArrayPattern(declaration.id)) {
         // @es2015 destrucuring
         // @flow
-        const initValue = path.evaluate(path.createChild(declaration.init));
+        const initValue = path.evaluate(path.createChild(declaration.init!));
 
         if (!initValue[Symbol.iterator]) {
           throw overriteStack(
             ErrInvalidIterable("{(intermediate value)}"),
             stack,
-            declaration.init
+            declaration.init!
           );
         }
 
         declaration.id.elements.forEach((n, i) => {
           if (isIdentifier(n)) {
             const $varName: string = n.typeAnnotation
-              ? (n.typeAnnotation.typeAnnotation as any).id.name
+              ? // @ts-ignore
+                (n.typeAnnotation.typeAnnotation as any).id.name
               : n.name;
 
             const el = initValue[i];
@@ -361,7 +367,7 @@ export const es5: ES5Map = {
         throw node;
       }
 
-      // start defned var
+      // start defined var
       for (const varName in varKeyValueMap) {
         /**
          * If the scope is penetrating and defined as VAR, it is defined on its parent scope
@@ -391,7 +397,7 @@ export const es5: ES5Map = {
       }
     }
   },
-  VariableDeclarator: path => {
+  VariableDeclarator: (path) => {
     const { node, scope } = path;
     // @es2015 destructuring
     if (isObjectPattern(node.id)) {
@@ -419,13 +425,13 @@ export const es5: ES5Map = {
   },
   FunctionDeclaration(path) {
     const { node, scope } = path;
-    const { name: functionName } = node.id;
+    const { name: functionName } = node.id!;
 
     let func;
 
     if (node.async) {
       // FIXME: support async function
-      func = function() {
+      func = function () {
         return __awaiter(this, void 0, void 0, () => {
           // tslint:disable-next-line
           const __this = this;
@@ -441,7 +447,7 @@ export const es5: ES5Map = {
 
             const fieldContext = {
               call: false,
-              value: null
+              value: null,
             };
             function next(value) {
               fieldContext.value = value;
@@ -469,7 +475,7 @@ export const es5: ES5Map = {
         });
       };
     } else if (node.generator) {
-      func = function() {
+      func = function () {
         // tslint:disable-next-line
         const __this = this;
 
@@ -484,7 +490,7 @@ export const es5: ES5Map = {
 
           const fieldContext = {
             call: false,
-            value: null
+            value: null,
           };
           function next(value) {
             fieldContext.value = value;
@@ -595,6 +601,10 @@ export const es5: ES5Map = {
 
     const right = path.evaluate(path.createChild(node.right));
 
+    if (kind === "using" || kind === "await using") {
+      throw ErrorUsing(node);
+    }
+
     for (const value in right) {
       if (Object.hasOwnProperty.call(right, value)) {
         const forInScope = scope.createChild(ScopeType.ForIn);
@@ -704,12 +714,19 @@ export const es5: ES5Map = {
       tryScope.isolated = false;
       return path.evaluate(path.createChild(node.block, tryScope));
     } catch (err) {
-      const param = node.handler.param as types.Identifier;
-      const catchScope = scope.createChild(ScopeType.Catch);
-      catchScope.invasive = true;
-      catchScope.isolated = false;
-      catchScope.const(param.name, err);
-      return path.evaluate(path.createChild(node.handler, catchScope));
+      // // TODO
+      // // A try without a catch clause sends its error to the next higher catch, or the window, if there is no catch defined within that try.
+      // // If you do not have a catch, a try expression requires a finally clause.
+      if (node.handler) {
+        const param = node.handler.param as types.Identifier;
+        const catchScope = scope.createChild(ScopeType.Catch);
+        catchScope.invasive = true;
+        catchScope.isolated = false;
+        catchScope.const(param.name, err);
+        return path.evaluate(path.createChild(node.handler, catchScope));
+      } else {
+        throw err;
+      }
     } finally {
       if (node.finalizer) {
         const finallyScope = scope.createChild(ScopeType.Finally);
@@ -787,19 +804,19 @@ export const es5: ES5Map = {
         },
         get value() {
           return object[property];
-        }
+        },
       };
     }
 
     return {
-      "--": v => {
+      "--": (v) => {
         $var.set(v - 1);
         return prefix ? --v : v--;
       },
-      "++": v => {
+      "++": (v) => {
         $var.set(v + 1);
         return prefix ? ++v : v++;
-      }
+      },
     }[node.operator](path.evaluate(path.createChild(node.argument)));
   },
   ThisExpression(path) {
@@ -844,12 +861,18 @@ export const es5: ES5Map = {
         computedProperties.push(tempProperty);
         continue;
       }
-      path.evaluate(path.createChild(property, newScope, { object }));
+      Object.assign(
+        object,
+        path.evaluate(path.createChild(property, newScope, { object }))
+      );
     }
 
     // eval the computed properties
     for (const property of computedProperties) {
-      path.evaluate(path.createChild(property, newScope, { object }));
+      Object.assign(
+        object,
+        path.evaluate(path.createChild(property, newScope, { object }))
+      );
     }
 
     return object;
@@ -872,7 +895,7 @@ export const es5: ES5Map = {
         ? node.key.name
         : path.evaluate(path.createChild(node.key))
       : path.evaluate(path.createChild(node.key));
-    const method = function() {
+    const method = function () {
       stack.enter("Object." + methodName);
       const args = [].slice.call(arguments);
       const newScope = scope.createChild(ScopeType.Function);
@@ -900,7 +923,7 @@ export const es5: ES5Map = {
       },
       method() {
         Object.defineProperty(path.ctx.object, methodName, { value: method });
-      }
+      },
     };
 
     const definer = objectKindMap[node.kind];
@@ -913,7 +936,7 @@ export const es5: ES5Map = {
     const { node, scope, stack } = path;
 
     const functionName = node.id ? node.id.name : "";
-    const func = function(...args) {
+    const func = function (...args) {
       stack.enter(functionName); // enter the stack
 
       // Is this function is a constructor?
@@ -946,7 +969,7 @@ export const es5: ES5Map = {
         target:
           this && this.__proto__ && this.__proto__.constructor
             ? this.__proto__.constructor
-            : undefined
+            : undefined,
       });
       funcScope.const(ARGUMENTS, arguments);
       funcScope.isolated = false;
@@ -1009,7 +1032,7 @@ export const es5: ES5Map = {
             return $this.value[node.argument.name];
           }
         }
-      }
+      },
     }[node.operator]();
   },
   CallExpression(path) {
@@ -1034,7 +1057,7 @@ export const es5: ES5Map = {
       : (node.callee as types.Identifier).name;
 
     const func = path.evaluate(path.createChild(node.callee));
-    const args = node.arguments.map(arg =>
+    const args = node.arguments.map((arg) =>
       path.evaluate(path.createChild(arg))
     );
     const isValidFunction = isFunction(func) as boolean;
@@ -1052,7 +1075,7 @@ export const es5: ES5Map = {
         stack.push({
           filename: ANONYMOUS,
           stack: stack.currentStackName,
-          location: node.callee.property.loc
+          location: node.callee.property.loc,
         });
       }
       context = path.evaluate(path.createChild(node.callee.object));
@@ -1063,7 +1086,7 @@ export const es5: ES5Map = {
         stack.push({
           filename: ANONYMOUS,
           stack: stack.currentStackName,
-          location: node.loc
+          location: node.loc,
         });
       }
       const thisVar = scope.hasBinding(THIS);
@@ -1100,12 +1123,11 @@ export const es5: ES5Map = {
       propertyName === "prototype" && types.isIdentifier(property);
 
     const target = isPrototype ? new Prototype(obj) : obj[propertyName];
-
     return target instanceof Prototype
       ? target
       : isFunction(target)
-        ? target.bind(obj)
-        : target;
+      ? target.bind(obj)
+      : target;
   },
   AssignmentExpression(path) {
     const { node, scope } = path;
@@ -1116,7 +1138,7 @@ export const es5: ES5Map = {
       },
       get value() {
         return undefined;
-      }
+      },
     };
     let rightValue;
 
@@ -1172,10 +1194,9 @@ export const es5: ES5Map = {
         },
         get value() {
           return object[property];
-        }
+        },
       };
     }
-
     return AssignmentExpressionEvaluateMap[node.operator]($var, rightValue);
   },
   LogicalExpression(path) {
@@ -1186,7 +1207,7 @@ export const es5: ES5Map = {
         path.evaluate(path.createChild(node.right)),
       "&&": () =>
         path.evaluate(path.createChild(node.left)) &&
-        path.evaluate(path.createChild(node.right))
+        path.evaluate(path.createChild(node.right)),
     }[node.operator]();
   },
   ConditionalExpression(path) {
@@ -1197,7 +1218,7 @@ export const es5: ES5Map = {
   NewExpression(path) {
     const { node, stack } = path;
     const func = path.evaluate(path.createChild(node.callee));
-    const args: any[] = node.arguments.map(arg =>
+    const args: any[] = node.arguments.map((arg) =>
       path.evaluate(path.createChild(arg))
     );
     func.prototype.constructor = func;
@@ -1217,5 +1238,5 @@ export const es5: ES5Map = {
       result = path.evaluate(path.createChild(expression));
     }
     return result;
-  }
+  },
 };

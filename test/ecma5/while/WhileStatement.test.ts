@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("WhileStatement-1", t => {
+test("WhileStatement-1", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -23,7 +23,7 @@ module.exports = obj;
   t.deepEqual(obj.i, 3);
 });
 
-test("WhileStatement-2", t => {
+test("WhileStatement-2", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(

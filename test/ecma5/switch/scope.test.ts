@@ -2,7 +2,7 @@ import test from "ava";
 import { ErrDuplicateDeclard } from "../../../src/error";
 import vm from "../../../src/vm";
 
-test("var in switch block should cover the parent scope", t => {
+test("var in switch block should cover the parent scope", (t) => {
   const sandbox: any = vm.createContext({});
 
   const a: any = vm.runInContext(
@@ -26,7 +26,7 @@ module.exports = a;
   t.deepEqual(a, "b");
 });
 
-test("let in switch block should define in it's scope", t => {
+test("let in switch block should define in it's scope", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -53,7 +53,7 @@ module.exports = {a: a, b: b};
   t.deepEqual(obj.b, "b");
 });
 
-test("const in switch block should define in it's scope", t => {
+test("const in switch block should define in it's scope", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -80,12 +80,13 @@ module.exports = {a: a, b: b};
   t.deepEqual(obj.b, "b");
 });
 
-test("var in switch block and parent scope let some name var", t => {
+test("var in switch block and parent scope let some name var", (t) => {
   const sandbox: any = vm.createContext({});
 
-  t.throws(function() {
-    vm.runInContext(
-      `
+  t.throws(
+    function () {
+      vm.runInContext(
+        `
 let a = "a";
 
 switch (a) {
@@ -98,17 +99,21 @@ switch (a) {
     break;
 }
     `,
-      sandbox
-    );
-  }, ErrDuplicateDeclard("a").message);
+        sandbox
+      );
+    },
+    undefined,
+    ErrDuplicateDeclard("a").message
+  );
 });
 
-test("var in switch block and parent scope const some name var", t => {
+test("var in switch block and parent scope const some name var", (t) => {
   const sandbox: any = vm.createContext({});
 
-  t.throws(function() {
-    vm.runInContext(
-      `
+  t.throws(
+    function () {
+      vm.runInContext(
+        `
 const a = "a";
 
 switch (a) {
@@ -121,12 +126,15 @@ switch (a) {
     break;
 }
     `,
-      sandbox
-    );
-  }, ErrDuplicateDeclard("a").message);
+        sandbox
+      );
+    },
+    undefined,
+    ErrDuplicateDeclard("a").message
+  );
 });
 
-test("switch scope should share scope in each case", t => {
+test("switch scope should share scope in each case", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj = vm.runInContext(

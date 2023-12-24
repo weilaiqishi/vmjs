@@ -27,59 +27,63 @@ import vm from "../../../src/vm";
 //   t.true(people.__proto__.constructor === People);
 // });
 
-// test("ClassDeclaration-property", t => {
-//   const sandbox: any = vm.createContext({});
+test("ClassDeclaration-property", (t) => {
+  const sandbox: any = vm.createContext({});
 
-//   const People: any = vm.runInContext(
-//     `
-// class People{
-//   age = 21;
-//   constructor(name){
-//     this.name = name;
-//   }
-//   getAge(){
-//     return this.age;
-//   }
-// }
+  const People: any = vm.runInContext(
+    `
+class People{
+  age = 21;
+  gender
+  constructor(name){
+    this.name = name;
+  }
+  getAge(){
+    return this.age;
+  }
+  ['getAge2'](){
+    return this.age;
+  }
+}
 
-// module.exports = People;
-//   `,
-//     sandbox
-//   );
+module.exports = People;
+  `,
+    sandbox
+  );
 
-//   const people = new People("axetroy");
+  const people = new People("axetroy");
+  t.deepEqual(people.name, "axetroy");
+  t.deepEqual(people.age, 21);
+  t.deepEqual(people.getAge(), 21);
+  t.deepEqual(people.getAge2(), 21);
+  t.true(people instanceof People);
+});
 
-//   t.deepEqual(people.name, "axetroy");
-//   t.deepEqual(people.age, 21);
-//   t.deepEqual(people.getAge(), 21);
-//   t.true(people instanceof People);
-// });
+test("ClassDeclaration-method", (t) => {
+  const sandbox: any = vm.createContext({});
 
-// test("ClassDeclaration-method", t => {
-//   const sandbox: any = vm.createContext({});
+  const Base: any = vm.runInContext(
+    `
+class Base{
+  constructor(){
+    this.name = "hello world";
+  }
+  say(word){
+    return "hello " + word;
+  }
+}
 
-//   const Base: any = vm.runInContext(
-//     `
-// class Base{
-//   constructor(){
-//     this.name = "hello world";
-//   }
-//   say(word){
-//     return "hello " + word;
-//   }
-// }
+module.exports = Base;
+  `,
+    sandbox
+  );
 
-// module.exports = Base;
-//   `,
-//     sandbox
-//   );
+  const base = new Base();
 
-//   const base = new Base();
-
-//   t.deepEqual(base.name, "hello world");
-//   t.true(base instanceof Base);
-//   t.deepEqual(base.say("world"), "hello world");
-// });
+  t.deepEqual(base.name, "hello world");
+  t.true(base instanceof Base);
+  t.deepEqual(base.say("world"), "hello world");
+});
 
 // test("ClassDeclaration-getter and setter", t => {
 //   const sandbox: any = vm.createContext({});
@@ -304,26 +308,32 @@ import vm from "../../../src/vm";
 //   t.deepEqual(People.name, "People");
 // });
 
-test("ClassDeclaration-extends use this before super", t => {
+test("ClassDeclaration-extends use this before super", (t) => {
   const sandbox: any = vm.createContext({});
 
-  t.throws(function() {
-    vm.runInContext(
-      `
-class Life{
-}
-class People extends Life{
-  constructor(name){
-    this.name = 123; // it should throw an error, use 'this' before super()
-    super()
-  }
-}
-
-new People();
+  t.throws(
+    function () {
+      vm.runInContext(
+        `
+        class Life{
+        }
+        class People extends Life{
+          constructor(name){
+            this.name = 123; // it should throw an error, use 'this' before super()
+            super()
+          }
+          ['1'](){}
+          fn(){}
+        }
+        
+        new People();
     `,
-      sandbox
-    );
-  }, ErrNoSuper().message);
+        sandbox
+      );
+    },
+    undefined,
+    ErrNoSuper().message
+  );
 });
 
 // test("ClassDeclaration-extends auto super without constructor", t => {

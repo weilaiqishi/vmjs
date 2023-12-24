@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("ComputedProperties-1", t => {
+test("ComputedProperties-1", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -17,11 +17,11 @@ module.exports = obj;
   );
 
   t.deepEqual(obj, {
-    "@axetroy": 21
+    "@axetroy": 21,
   });
 });
 
-test("ComputedProperties-2", t => {
+test("ComputedProperties-2", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -42,11 +42,11 @@ module.exports = obj;
     xfoo: "heh",
     ybar: "noo",
     foo: "foo",
-    bar: "bar"
+    bar: "bar",
   });
 });
 
-test("ComputedProperties-3", t => {
+test("ComputedProperties-3", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -64,7 +64,7 @@ module.exports = obj;
   );
 
   t.deepEqual(obj.xfoo, "foo");
-  t.throws(function() {
+  t.throws(function () {
     obj.xfoo = 123; // it will throw
   });
 });

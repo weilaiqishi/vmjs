@@ -5,12 +5,12 @@ import vm from "../../../src/vm";
 function sleep(ms) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve();
+      resolve(null);
     }, ms);
   });
 }
 
-test("async with resolve", async t => {
+test("async with resolve", async (t) => {
   const sandbox: any = vm.createContext({});
 
   const get = vm.runInContext(
@@ -33,7 +33,7 @@ module.exports = get;
   t.deepEqual(result, 123);
 });
 
-test("async with reject", async t => {
+test("async with reject", async (t) => {
   const sandbox: any = vm.createContext({});
 
   const get = vm.runInContext(
@@ -58,7 +58,7 @@ module.exports = get;
   }
 });
 
-test("async with async action", async t => {
+test("async with async action", async (t) => {
   const sandbox: any = vm.createContext({ sleep });
 
   const get = vm.runInContext(

@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("NewExpression", t => {
+test("NewExpression", (t) => {
   const sandbox: any = vm.createContext({});
 
   const { people, People }: any = vm.runInContext(
@@ -28,11 +28,11 @@ module.exports = {
   t.true(people.constructor === People);
 });
 
-test("NewExpression for built-in functions", t => {
+test("NewExpression for built-in functions", (t) => {
   const sandbox: any = vm.createContext({
     Array,
     Date,
-    RegExp
+    RegExp,
   });
 
   const { array, date, regexp } = vm.runInContext(
@@ -55,7 +55,7 @@ test("NewExpression for built-in functions", t => {
   t.true(regexp instanceof RegExp);
 });
 
-test("NewExpression for constructor function which return object", t => {
+test("NewExpression for constructor function which return object", (t) => {
   const sandbox: any = vm.createContext({});
 
   const { o, p } = vm.runInContext(

@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("TryStatement", t => {
+test("TryStatement", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -26,7 +26,7 @@ module.exports = obj;
   t.false(obj.runError);
 });
 
-test("TryStatement-with-throw", t => {
+test("TryStatement-with-throw", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -52,7 +52,7 @@ module.exports = obj;
   t.true(obj.runError);
 });
 
-test("TryStatement with finally", t => {
+test("TryStatement with finally", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -81,7 +81,7 @@ module.exports = obj;
   t.true(obj.runFinally);
 });
 
-test("continue in try block nest loop", t => {
+test("continue in try block nest loop", (t) => {
   const sandbox: any = vm.createContext({});
 
   const arr: any = vm.runInContext(
@@ -108,7 +108,7 @@ module.exports = result;
   t.deepEqual(arr, [1, 3, 5]);
 });
 
-test("continue in catch block nest loop", t => {
+test("continue in catch block nest loop", (t) => {
   const sandbox: any = vm.createContext({});
 
   const arr: any = vm.runInContext(
@@ -136,7 +136,7 @@ module.exports = result;
   t.deepEqual(arr, [1, 3, 5]);
 });
 
-test("continue in finally block nest loop", t => {
+test("continue in finally block nest loop", (t) => {
   const sandbox: any = vm.createContext({});
 
   const arr: any = vm.runInContext(

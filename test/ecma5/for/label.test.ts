@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("break with label", t => {
+test("break with label", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -24,7 +24,7 @@ module.exports = num;
   t.deepEqual(num, 5);
 });
 
-test("nest for loop with label", t => {
+test("nest for loop with label", (t) => {
   const sandbox: any = vm.createContext({});
 
   const { i, m }: any = vm.runInContext(
@@ -48,7 +48,7 @@ module.exports = {i: i, m: m};
   t.deepEqual(m, 2);
 });
 
-test("endless for loop with label", t => {
+test("endless for loop with label", (t) => {
   const sandbox: any = vm.createContext({});
 
   const { i, m, y }: any = vm.runInContext(
@@ -78,7 +78,7 @@ module.exports = {i: i, m: m, y: y};
   t.deepEqual(y, 5);
 });
 
-test("continue with label", t => {
+test("continue with label", (t) => {
   const sandbox: any = vm.createContext({});
 
   const { i, m, y }: any = vm.runInContext(

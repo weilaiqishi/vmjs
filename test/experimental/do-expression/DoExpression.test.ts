@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("DoExpression", t => {
+test("DoExpression", (t) => {
   const sandbox: any = vm.createContext({});
 
   const get: any = vm.runInContext(

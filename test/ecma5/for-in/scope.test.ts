@@ -2,7 +2,7 @@ import test from "ava";
 import { ErrDuplicateDeclard } from "../../../src/error";
 import vm from "../../../src/vm";
 
-test("var in for-in block should cover the parent scope", t => {
+test("var in for-in block should cover the parent scope", (t) => {
   const sandbox: any = vm.createContext({});
 
   const a: any = vm.runInContext(
@@ -28,7 +28,7 @@ module.exports = a;
   t.deepEqual(a, 4);
 });
 
-test("let in for-in block should define in it's scope", t => {
+test("let in for-in block should define in it's scope", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -57,7 +57,7 @@ module.exports = {a: a, b: b};
   t.deepEqual(obj.b, 4);
 });
 
-test("const in for-in block should define in it's scope", t => {
+test("const in for-in block should define in it's scope", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -86,12 +86,13 @@ module.exports = {a: a, b: b};
   t.deepEqual(obj.b, 4);
 });
 
-test("var in for-in block and parent scope const some name var", t => {
+test("var in for-in block and parent scope const some name var", (t) => {
   const sandbox: any = vm.createContext({});
 
-  t.throws(function() {
-    vm.runInContext(
-      `
+  t.throws(
+    function () {
+      vm.runInContext(
+        `
 let a = 1;  // define let var
 
 var obj = {
@@ -108,7 +109,10 @@ for (let attr in obj){
 
 module.exports = {a: a};
     `,
-      sandbox
-    );
-  }, ErrDuplicateDeclard("a").message);
+        sandbox
+      );
+    },
+    undefined,
+    ErrDuplicateDeclard("a").message
+  );
 });

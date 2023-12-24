@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("ForStatement-1", t => {
+test("ForStatement-1", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -20,7 +20,7 @@ module.exports = obj;
   t.deepEqual(obj.num, 3);
 });
 
-test("ForStatement-2", t => {
+test("ForStatement-2", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(

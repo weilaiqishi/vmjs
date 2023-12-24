@@ -1,8 +1,8 @@
 import test from "ava";
-import { isImportDefaultSpecifier } from "babel-types";
+import { isImportDefaultSpecifier } from "@babel/types";
 import vm from "../../../src/vm";
 
-test("ExportDeclaration-1", t => {
+test("ExportDeclaration-1", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -22,11 +22,11 @@ export {obj}
   t.deepEqual(obj.b, 2);
   t.deepEqual(obj.obj, {
     a: 1,
-    b: 2
+    b: 2,
   });
 });
 
-test("ExportDeclaration-2", t => {
+test("ExportDeclaration-2", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -46,11 +46,11 @@ export default obj;
   t.deepEqual(obj.b, 2);
   t.deepEqual(obj.obj, {
     a: 1,
-    b: 2
+    b: 2,
   });
 });
 
-test("ExportDeclaration-3", t => {
+test("ExportDeclaration-3", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -75,6 +75,6 @@ export default obj;
   t.deepEqual(obj.d, 2);
   t.deepEqual(obj.obj, {
     a: 1,
-    b: 2
+    b: 2,
   });
 });

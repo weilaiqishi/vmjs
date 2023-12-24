@@ -1,4 +1,4 @@
-import * as types from "babel-types";
+import * as types from "@babel/types";
 import { Path } from "./path";
 import { IEcmaScriptMap } from "./type";
 import { es5 } from "./standard/es5";
@@ -12,7 +12,7 @@ const visitors: IEcmaScriptMap = {
   ...es2015,
   ...es2016,
   ...es2017,
-  ...experimental
+  ...experimental,
 };
 
 export default function evaluate(path: Path<types.Node>) {

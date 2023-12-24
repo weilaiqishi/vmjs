@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../src/vm";
 
-test("Assignment should calculate the right expression first", t => {
+test("Assignment should calculate the right expression first", (t) => {
   const sandbox: any = vm.createContext({});
 
   try {
@@ -15,6 +15,7 @@ a = b
     );
     t.fail("it should throw an error");
   } catch (err) {
+    // @ts-ignore
     t.deepEqual(err.message, "b is not defined");
   }
 });

@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("var don't have block scope", t => {
+test("var don't have block scope", (t) => {
   const sandbox: any = vm.createContext();
 
   const obj = vm.runInContext(
@@ -21,7 +21,7 @@ module.exports = {a:a, b:b};
   t.deepEqual(obj.b, 321);
 });
 
-test("let have block scope", t => {
+test("let have block scope", (t) => {
   const sandbox: any = vm.createContext();
 
   const obj = vm.runInContext(
@@ -41,7 +41,7 @@ module.exports = {a:a, b:b};
   t.deepEqual(obj.b, undefined);
 });
 
-test("let have block scope in the function", t => {
+test("let have block scope in the function", (t) => {
   const sandbox: any = vm.createContext();
 
   const abc = vm.runInContext(

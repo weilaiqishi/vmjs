@@ -2,7 +2,7 @@ import test from "ava";
 import { ErrDuplicateDeclard } from "../../../src/error";
 import vm from "../../../src/vm";
 
-test("VariableDeclaration-var", t => {
+test("VariableDeclaration-var", (t) => {
   const sandbox: any = vm.createContext({});
 
   const a: any = vm.runInContext(
@@ -17,7 +17,7 @@ module.exports = a;
   t.deepEqual(a, 123);
 });
 
-test("VariableDeclaration-duplicate-var", t => {
+test("VariableDeclaration-duplicate-var", (t) => {
   const sandbox: any = vm.createContext({});
 
   const a: any = vm.runInContext(
@@ -34,9 +34,9 @@ module.exports = a;
   t.deepEqual(a, 321);
 });
 
-test("VariableDeclaration-duplicate-with-context-var", t => {
+test("VariableDeclaration-duplicate-with-context-var", (t) => {
   const sandbox: any = vm.createContext({
-    global: "hello"
+    global: "hello",
   });
 
   const g = vm.runInContext(
@@ -50,9 +50,9 @@ module.exports = global;
   t.deepEqual(g, "hello");
 });
 
-test("VariableDeclaration-replace-context-var", t => {
+test("VariableDeclaration-replace-context-var", (t) => {
   const sandbox: any = vm.createContext({
-    global: "hello"
+    global: "hello",
   });
 
   const g = vm.runInContext(
@@ -68,9 +68,9 @@ module.exports = test();
   t.deepEqual(g, 123);
 });
 
-test("VariableDeclaration-define global var", t => {
+test("VariableDeclaration-define global var", (t) => {
   const sandbox: any = vm.createContext({
-    global: "hello"
+    global: "hello",
   });
 
   const output = vm.runInContext(
@@ -84,7 +84,7 @@ module.exports = {name: name, global}
   t.deepEqual(output.name, "axetroy");
 });
 
-test("VariableDeclaration-define var then cover value", t => {
+test("VariableDeclaration-define var then cover value", (t) => {
   const sandbox: any = vm.createContext({});
 
   const output = vm.runInContext(
@@ -98,7 +98,7 @@ module.exports = {name: name}
   t.deepEqual(output.name, "world");
 });
 
-test("VariableDeclaration-define global var in block scope", t => {
+test("VariableDeclaration-define global var in block scope", (t) => {
   const sandbox: any = vm.createContext({});
 
   const func = vm.runInContext(
@@ -116,7 +116,7 @@ module.exports = run;
   t.deepEqual(func(), "world");
 });
 
-test("VariableDeclaration-redefine global var in block scope", t => {
+test("VariableDeclaration-redefine global var in block scope", (t) => {
   const sandbox: any = vm.createContext({});
 
   const func = vm.runInContext(
@@ -135,7 +135,7 @@ module.exports = run;
   t.deepEqual(func(), "hello");
 });
 
-test("VariableDeclaration-continuous-define continuous assignment", t => {
+test("VariableDeclaration-continuous-define continuous assignment", (t) => {
   const sandbox: any = vm.createContext({});
 
   const { a, b } = vm.runInContext(

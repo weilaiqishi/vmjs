@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("ForInStatement-1", t => {
+test("ForInStatement-1", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -24,7 +24,7 @@ module.exports = obj;
   t.true(obj[2]);
 });
 
-test("ForInStatement-2", t => {
+test("ForInStatement-2", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(

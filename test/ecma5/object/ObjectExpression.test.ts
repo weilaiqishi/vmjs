@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("basic", t => {
+test("basic", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -19,7 +19,7 @@ module.exports = obj;
   t.deepEqual(obj.i, 0);
 });
 
-test("object with method", t => {
+test("object with method", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -39,7 +39,7 @@ module.exports = obj;
   t.deepEqual(obj.get(), obj.i);
 });
 
-test("object with getter method", t => {
+test("object with getter method", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(
@@ -59,7 +59,7 @@ module.exports = obj;
   t.deepEqual(obj.value, obj.i);
 });
 
-test("object with setter method", t => {
+test("object with setter method", (t) => {
   const sandbox: any = vm.createContext({});
 
   const obj: any = vm.runInContext(

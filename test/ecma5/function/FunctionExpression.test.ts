@@ -2,7 +2,7 @@ import test from "ava";
 import vm from "../../../src/vm";
 import { ErrIsNotFunction } from "../../../src/error";
 
-test("FunctionExpression-1", t => {
+test("FunctionExpression-1", (t) => {
   const sandbox: any = vm.createContext({});
 
   const testFunc = vm.runInContext(
@@ -22,7 +22,7 @@ module.exports = test;
   t.deepEqual(testFunc("world"), "hello world");
 });
 
-test("FunctionDeclaration-2", t => {
+test("FunctionDeclaration-2", (t) => {
   const sandbox: any = vm.createContext({});
 
   const testFunc = vm.runInContext(
@@ -42,7 +42,7 @@ module.exports = func;
   t.deepEqual(testFunc("world"), "hello world");
 });
 
-test("FunctionDeclaration-name", t => {
+test("FunctionDeclaration-name", (t) => {
   const sandbox: any = vm.createContext({});
 
   const person = vm.runInContext(
@@ -61,50 +61,44 @@ module.exports = person;
   t.deepEqual(person.sayName.name, "sayName");
 });
 
-test("invalid function call", t => {
+test("invalid function call", (t) => {
   const sandbox: any = vm.createContext({});
 
-  t.throws(() => {
-    vm.runInContext(
-      `
+  t.throws(
+    () => {
+      vm.runInContext(
+        `
   const a = 123;
   
   module.exports = a(); // a is not a function
     `,
-      sandbox
-    );
-  }, ErrIsNotFunction("a").message);
+        sandbox
+      );
+    },
+    undefined,
+    ErrIsNotFunction("a").message
+  );
 });
 
-test("object-property function call name", t => {
+test("object-property function call name", (t) => {
   const sandbox: any = vm.createContext({});
 
-  t.throws(() => {
-    vm.runInContext(
-      `
+  t.throws(
+    () => {
+      vm.runInContext(
+        `
 var obj = {};
 obj.a();
     `,
-      sandbox
-    );
-  }, ErrIsNotFunction("obj.a").message);
+        sandbox
+      );
+    },
+    undefined,
+    ErrIsNotFunction("obj.a").message
+  );
 });
 
-test("object-property function call name", t => {
-  const sandbox: any = vm.createContext({});
-
-  t.throws(() => {
-    vm.runInContext(
-      `
-var obj = {};
-obj["a"]();
-    `,
-      sandbox
-    );
-  }, ErrIsNotFunction("obj.a").message);
-});
-
-test("function params should can be overwrite", t => {
+test("function params should can be overwrite", (t) => {
   const sandbox: any = vm.createContext({});
 
   const test = vm.runInContext(

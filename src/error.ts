@@ -34,3 +34,10 @@ export function ErrCanNotReadProperty(
 ): ReferenceError {
   return new TypeError(`Cannot read property '${property}' of ${target}`);
 }
+
+export function ErrorUsing(node) {
+  return new Error(
+    "No support for 'using' or 'await using' declarations. node: " +
+      JSON.stringify(node)
+  );
+}

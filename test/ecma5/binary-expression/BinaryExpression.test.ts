@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("+", t => {
+test("+", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -13,7 +13,7 @@ module.exports = 1 + 2;
   t.deepEqual(num, 3);
 });
 
-test("+=", t => {
+test("+=", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -28,7 +28,7 @@ module.exports = a;
   t.deepEqual(num, 3);
 });
 
-test("-", t => {
+test("-", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -40,7 +40,7 @@ module.exports = 2 - 1;
   t.deepEqual(num, 1);
 });
 
-test("-=", t => {
+test("-=", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -55,7 +55,7 @@ module.exports = a;
   t.deepEqual(num, -1);
 });
 
-test("*", t => {
+test("*", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -67,7 +67,7 @@ module.exports = 2 * 1;
   t.deepEqual(num, 2);
 });
 
-test("*=", t => {
+test("*=", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -82,7 +82,7 @@ module.exports = a;
   t.deepEqual(num, 2);
 });
 
-test("/", t => {
+test("/", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -94,7 +94,7 @@ module.exports = 2 / 1;
   t.deepEqual(num, 2);
 });
 
-test("/=", t => {
+test("/=", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -109,7 +109,7 @@ module.exports = a;
   t.deepEqual(num, 0.5);
 });
 
-test("%", t => {
+test("%", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -121,7 +121,7 @@ module.exports = 2 % 1;
   t.deepEqual(num, 0);
 });
 
-test("%=", t => {
+test("%=", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -136,7 +136,7 @@ module.exports = a;
   t.deepEqual(num, 1);
 });
 
-test("**", t => {
+test("**", (t) => {
   const sandbox: any = vm.createContext({});
 
   const num: any = vm.runInContext(
@@ -148,7 +148,7 @@ module.exports = 2 ** 2;
   t.deepEqual(num, 4);
 });
 
-test(">", t => {
+test(">", (t) => {
   const sandbox: any = vm.createContext({});
 
   const output: any = vm.runInContext(
@@ -160,7 +160,7 @@ module.exports = 2 > 2;
   t.deepEqual(output, false);
 });
 
-test(">=", t => {
+test(">=", (t) => {
   const sandbox: any = vm.createContext({});
 
   const output: any = vm.runInContext(
@@ -172,7 +172,7 @@ module.exports = 2 >= 2;
   t.deepEqual(output, true);
 });
 
-test("<", t => {
+test("<", (t) => {
   const sandbox: any = vm.createContext({});
 
   const output: any = vm.runInContext(
@@ -184,7 +184,7 @@ module.exports = 2 < 2;
   t.deepEqual(output, false);
 });
 
-test("<=", t => {
+test("<=", (t) => {
   const sandbox: any = vm.createContext({});
 
   const output: any = vm.runInContext(
@@ -196,7 +196,7 @@ module.exports = 2 <= 2;
   t.deepEqual(output, true);
 });
 
-test(">>", t => {
+test(">>", (t) => {
   const sandbox: any = vm.createContext({});
 
   const output: any = vm.runInContext(
@@ -208,7 +208,7 @@ module.exports = 2 >> 2;
   t.deepEqual(output, 0);
 });
 
-test(">>>", t => {
+test(">>>", (t) => {
   const sandbox: any = vm.createContext({});
 
   const output: any = vm.runInContext(
@@ -220,7 +220,7 @@ module.exports = 2 >>> 2;
   t.deepEqual(output, 0);
 });
 
-test("<<", t => {
+test("<<", (t) => {
   const sandbox: any = vm.createContext({});
 
   const output: any = vm.runInContext(
@@ -232,7 +232,7 @@ module.exports = 2 << 2;
   t.deepEqual(output, 8);
 });
 
-test("&", t => {
+test("&", (t) => {
   const sandbox: any = vm.createContext({});
 
   const output: any = vm.runInContext(
@@ -244,7 +244,7 @@ module.exports = 2 & 2;
   t.deepEqual(output, 2);
 });
 
-test("|", t => {
+test("|", (t) => {
   const sandbox: any = vm.createContext({});
 
   const output: any = vm.runInContext(

@@ -43,7 +43,7 @@ export const DEFAULT_CONTEXT: ISandBox = {
   SyntaxError,
   TypeError,
   unescape,
-  URIError
+  URIError,
 };
 
 // need to polyfill by user

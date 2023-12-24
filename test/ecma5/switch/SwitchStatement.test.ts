@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("SwitchStatement", t => {
+test("SwitchStatement", (t) => {
   const sandbox: any = vm.createContext({});
 
   const func: any = vm.runInContext(
@@ -28,7 +28,7 @@ module.exports = t;
   t.deepEqual(func("aa"), "hello world");
 });
 
-test("SwitchStatement-2", t => {
+test("SwitchStatement-2", (t) => {
   const sandbox: any = vm.createContext({});
 
   const func: any = vm.runInContext(
@@ -55,7 +55,7 @@ module.exports = t;
   t.deepEqual(func("aa"), "hello world");
 });
 
-test("SwitchStatement with continue", t => {
+test("SwitchStatement with continue", (t) => {
   const sandbox: any = vm.createContext({});
 
   const func: any = vm.runInContext(

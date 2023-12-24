@@ -1,18 +1,15 @@
 {
   "name": "@kimeng/vm",
-  "version": "0.4",
+  "version": "0.5",
   "description": "Javascript Interpreter, run Javascript code in ECMAScript",
   "main": "./dist/vm.js",
+  "source": "src",
   "typings": "./dist/vm.d.ts",
   "scripts": {
     "test": "rm -rf ./build && tsc -p ./ && nyc ava ./build/test ./build/src/**/*.test.js",
     "build": "rm -rf ./dist && webpack --display-error-details --progress --colors",
     "buildNRM": "webpack --display-error-details --progress --colors",
-    "start": "npm run build && parcel ./doc/index.html -d vm.js",
-    "docs": "npm run build && npx parcel build doc/index.html -d ./vm.js --public-url /vm.js",
     "format": "prettier --write ./src/**/*.ts ./test/**/*.ts",
-    "tslint-check": "tslint-config-prettier-check ./tslint.json",
-    "lint": "tslint -p ./ -c tslint.json",
     "changelog": "npx conventional-changelog-cli -p angular -i CHANGELOG.md -s -r 0"
   },
   "repository": {
@@ -22,43 +19,29 @@
   "author": "Axetroy",
   "license": "MIT",
   "dependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.16.8",
-    "@babel/plugin-transform-strict-mode": "^7.16.7",
-    "babel-types": "^6.26.0",
-    "babylon": "^6.18.0",
-    "lodash.isfunction": "^3.0.9"
+    "@babel/parser": "^7.23.6",
+    "@babel/plugin-transform-modules-commonjs": "^7.23.3",
+    "@babel/plugin-transform-strict-mode": "^7.23.3",
+    "@babel/types": "^7.23.6",
+    "lodash.isfunction": "^3.0.9",
+    "ts-loader": "^9.5.1"
   },
   "bugs": {
     "url": "https://github.com/axetroy/vm.js/issues"
   },
   "homepage": "https://github.com/axetroy/vm.js#readme",
   "devDependencies": {
-    "@types/babel-core": "6.25.6",
     "@types/lodash": "4.14.168",
-    "@types/node": "9.6.61",
-    "@types/webpack": "4.41.25",
-    "ava": "0.25.0",
-    "babel-core": "6.26.3",
-    "babel-plugin-transform-remove-strict-mode": "^0.0.2",
-    "babel-preset-env": "1.7.0",
-    "babel-preset-react": "6.24.1",
+    "@types/node": "*",
+    "ava": "^6.0.1",
     "coveralls": "3.1.0",
     "husky": "5.0.8",
-    "normalize.css": "8.0.1",
     "nyc": "15.1.0",
-    "parcel-bundler": "1.12.5",
-    "prettier": "2.2.1",
-    "pretty-quick": "3.1.0",
-    "react": "17.0.2",
-    "react-codemirror": "1.0.0",
-    "react-dom": "17.0.2",
-    "ts-lint": "4.5.1",
-    "ts-loader": "8.0.15",
-    "ts-node": "9.1.1",
-    "tslint": "5.20.1",
-    "tslint-config-prettier": "1.18.0",
-    "typescript": "3.8.3",
-    "webpack": "5.20.0",
+    "prettier": "^2.2.1",
+    "pretty-quick": "^3.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "5.3.3",
+    "webpack": "5.89.0",
     "webpack-cli": "3.3.12"
   }
 }

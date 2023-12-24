@@ -1,7 +1,7 @@
 import test from "ava";
 import vm from "../../../src/vm";
 
-test("TemplateLiteral-1", t => {
+test("TemplateLiteral-1", (t) => {
   const sandbox: any = vm.createContext({});
 
   const word: any = vm.runInContext("module.exports = `hello world`;", sandbox);
@@ -9,7 +9,7 @@ test("TemplateLiteral-1", t => {
   t.deepEqual(word, "hello world");
 });
 
-test("TemplateLiteral-2", t => {
+test("TemplateLiteral-2", (t) => {
   const sandbox: any = vm.createContext({ name: "world" });
 
   const word: any = vm.runInContext(
@@ -20,7 +20,7 @@ test("TemplateLiteral-2", t => {
   t.deepEqual(word, "hello world");
 });
 
-test("TemplateLiteral-3", t => {
+test("TemplateLiteral-3", (t) => {
   const sandbox: any = vm.createContext({ name: "world", age: 21 });
 
   const word: any = vm.runInContext(

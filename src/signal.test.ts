@@ -1,7 +1,7 @@
 import test from "ava";
 import { Signal } from "./signal";
 
-test("signal check", t => {
+test("signal check", (t) => {
   t.false(Signal.isBreak(undefined));
   t.false(Signal.isReturn(null));
   t.false(Signal.isContinue(0));

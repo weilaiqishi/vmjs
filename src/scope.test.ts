@@ -4,7 +4,7 @@ import { Context, DEFAULT_CONTEXT } from "./context";
 import { ErrDuplicateDeclard } from "./error";
 import { ScopeType } from "./type";
 
-test("root scope", t => {
+test("root scope", (t) => {
   const scope = new Scope(ScopeType.Root, null);
   t.deepEqual(scope.type, ScopeType.Root);
   t.deepEqual(scope.level, 0);
@@ -17,7 +17,7 @@ test("root scope", t => {
   t.deepEqual(scope.origin, null);
 });
 
-test("setContext()", t => {
+test("setContext()", (t) => {
   const scope = new Scope(ScopeType.Root, null);
   scope.setContext(new Context());
 
@@ -32,13 +32,13 @@ test("setContext()", t => {
   t.true(!!scope.hasOwnBinding("name"));
 });
 
-test("hasOwnBinding()", t => {
+test("hasOwnBinding()", (t) => {
   const scope = new Scope(ScopeType.Root, null);
   scope.setContext(new Context());
   t.true(!!scope.hasOwnBinding("console"));
 });
 
-test("hasBinding()", t => {
+test("hasBinding()", (t) => {
   const scope = new Scope(ScopeType.Root, null);
   t.true(scope.var("name", "vm"));
 
@@ -51,7 +51,7 @@ test("hasBinding()", t => {
   t.true(!!child.hasBinding("name"));
 });
 
-test("var()", t => {
+test("var()", (t) => {
   const scope = new Scope(ScopeType.Root, null);
   t.true(scope.var("name", "vm"));
 
@@ -64,7 +64,7 @@ test("var()", t => {
   t.deepEqual($var.value, "vm");
 });
 
-test("'var' can be redeclare if variable have been declare with 'var'", t => {
+test("'var' can be redeclare if variable have been declare with 'var'", (t) => {
   const scope = new Scope(ScopeType.Root, null);
   t.true(scope.var("name", "vm"));
 
@@ -88,7 +88,7 @@ test("'var' can be redeclare if variable have been declare with 'var'", t => {
   t.deepEqual($newVar.value, "hello");
 });
 
-test("let can be redeclare", t => {
+test("let can be redeclare", (t) => {
   const scope = new Scope(ScopeType.Root, null);
   t.true(scope.var("name", "vm")); // declare
 
@@ -100,12 +100,16 @@ test("let can be redeclare", t => {
 
   t.deepEqual($var.value, "vm");
 
-  t.throws(() => {
-    scope.let("name", "hello"); // redeclare
-  }, ErrDuplicateDeclard("name").message);
+  t.throws(
+    () => {
+      scope.let("name", "hello"); // redeclare
+    },
+    undefined,
+    ErrDuplicateDeclard("name").message
+  );
 });
 
-test("const can be redeclare", t => {
+test("const can be redeclare", (t) => {
   const scope = new Scope(ScopeType.Root, null);
   t.true(scope.var("name", "vm")); // declare
 
@@ -117,12 +121,16 @@ test("const can be redeclare", t => {
 
   t.deepEqual($var.value, "vm");
 
-  t.throws(() => {
-    scope.const("name", "hello"); // redeclare
-  }, ErrDuplicateDeclard("name").message);
+  t.throws(
+    () => {
+      scope.const("name", "hello"); // redeclare
+    },
+    undefined,
+    ErrDuplicateDeclard("name").message
+  );
 });
 
-test("delete variable from a scope", t => {
+test("delete variable from a scope", (t) => {
   const scope = new Scope(ScopeType.Root, null);
   t.true(scope.var("name", "vm")); // declare
 
@@ -142,7 +150,7 @@ test("delete variable from a scope", t => {
   t.deepEqual(scope.length, 0);
 });
 
-test("create child", t => {
+test("create child", (t) => {
   const scope = new Scope(ScopeType.Root, null);
   t.true(scope.var("name", "vm")); // declare
   t.deepEqual(scope.level, 0);
@@ -156,7 +164,7 @@ test("create child", t => {
   t.true(!!child.hasBinding("name"));
 });
 
-test("fork child", t => {
+test("fork child", (t) => {
   const scope = new Scope(ScopeType.Root, null);
   t.true(scope.var("name", "vm")); // declare
   t.deepEqual(scope.level, 0);
@@ -176,7 +184,7 @@ test("fork child", t => {
   scope.fork();
 });
 
-test("locate scope", t => {
+test("locate scope", (t) => {
   const scope = new Scope(ScopeType.Root, null);
   t.true(scope.var("name", "vm")); // declare
 
