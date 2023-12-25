@@ -1,14 +1,13 @@
 {
   "name": "@kimeng/vm",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Javascript Interpreter, run Javascript code in ECMAScript",
   "main": "./dist/vm.js",
   "source": "src",
   "typings": "./dist/vm.d.ts",
   "scripts": {
     "test": "rm -rf ./build && tsc -p ./ && nyc ava ./build/test ./build/src/**/*.test.js",
-    "build": "rm -rf ./dist && webpack --display-error-details --progress --colors",
-    "buildNRM": "webpack --display-error-details --progress --colors",
+    "build": "rm -rf ./dist && webpack",
     "format": "prettier --write ./src/**/*.ts ./test/**/*.ts",
     "changelog": "npx conventional-changelog-cli -p angular -i CHANGELOG.md -s -r 0"
   },
@@ -34,14 +33,14 @@
     "@types/lodash": "4.14.168",
     "@types/node": "*",
     "ava": "^6.0.1",
-    "coveralls": "3.1.0",
-    "husky": "5.0.8",
-    "nyc": "15.1.0",
+    "coveralls": "^3.1.1",
+    "husky": "^8.0.3",
+    "nyc": "^15.1.0",
     "prettier": "^2.2.1",
     "pretty-quick": "^3.1.0",
     "ts-node": "^10.9.2",
-    "typescript": "5.3.3",
-    "webpack": "5.89.0",
-    "webpack-cli": "3.3.12"
+    "typescript": "^5.3.3",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
   }
 }
